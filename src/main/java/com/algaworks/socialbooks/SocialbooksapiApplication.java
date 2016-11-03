@@ -10,3 +10,5 @@ public class SocialbooksapiApplication {
 		SpringApplication.run(SocialbooksapiApplication.class, args);
 	}
 }
+
+// JDBC URL: jdbc:h2:mem:testdb

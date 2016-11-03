@@ -16,6 +16,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.algaworks.socialbooks.domain.Livro;
 import com.algaworks.socialbooks.repository.LivrosRepository;
+import com.algaworks.socialbooks.services.LivrosService;
+import com.algaworks.socialbooks.services.exceptions.LivroNaoEncontradoException;
 
 //diz que essa classe é um controler (MVC) para o SprintMVC
 @RestController
@@ -23,7 +25,7 @@ import com.algaworks.socialbooks.repository.LivrosRepository;
 public class LivrosResources {
 	
 	@Autowired
-	private LivrosRepository livrosRepository;
+	private LivrosService livrosServices;
 	
 	// diz qual a URI que será usada para acessar o método, por meio do método GET do HTTP
 	/*@RequestMapping(value = "/livros", method = RequestMethod.GET)
@@ -43,14 +45,14 @@ public class LivrosResources {
 	//@RequestMapping(value = "/livros", method = RequestMethod.GET)
 	@RequestMapping(method = RequestMethod.GET)//Quando é usado a anotation @RequestMapping não é necessário passar o value
 	public ResponseEntity<List<Livro>>listar(){
-		return ResponseEntity.status(HttpStatus.OK).body(livrosRepository.findAll());
+		return ResponseEntity.status(HttpStatus.OK).body(livrosServices.lista());
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> salvar(@RequestBody Livro livro){//Pega o que está vindo no Post e coloque no parâmetro Livro
 		//livrosRepository.save(livro);//o método save é do Spring
 		
-		livro = livrosRepository.save(livro);
+		livro = livrosServices.salvar(livro);
 		
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
 				.path("/{id}").buildAndExpand(livro.getId()).toUri();//Cria a URI para acessar a informação inserida
@@ -66,10 +68,13 @@ public class LivrosResources {
 		 * return livrosRepository.findOne(id);
 		 */
 		
-		Livro livro = livrosRepository.findOne(id);
+		Livro livro = null;
 		
-		if (livro == null)
+		try{
+			livro = livrosServices.buscar(id);
+		}catch (LivroNaoEncontradoException e){
 			return ResponseEntity.notFound().build();
+	    }
 		
 		return ResponseEntity.status(HttpStatus.OK).body(livro);
 	}
@@ -78,8 +83,8 @@ public class LivrosResources {
 	public ResponseEntity<Void> deletar(@PathVariable("id") Long id){
 		
 		try{
-			livrosRepository.delete(id);
-		}catch(EmptyResultDataAccessException e){
+			livrosServices.deletar(id);
+		}catch(LivroNaoEncontradoException e){
 			return ResponseEntity.notFound().build();
 		}
 		
@@ -88,11 +93,14 @@ public class LivrosResources {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> atualizar(@RequestBody Livro livro, @PathVariable("id") Long id){
+		
 		livro.setId(id);
-		livrosRepository.save(livro);
 		
-		System.out.println("Id => " + livro.getId().toString() + " Nome =>" + livro.getNome());
-		
+		try {
+			livrosServices.atualizar(livro);
+		} catch (LivroNaoEncontradoException e) {
+			return ResponseEntity.notFound().build();
+		}
 		
 		return ResponseEntity.noContent().build();
 	}
