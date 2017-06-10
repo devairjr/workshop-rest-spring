@@ -1,9 +1,13 @@
 Manifest-Version: 1.0
 Implementation-Title: socialbooksapi
 Implementation-Version: 1.0.0-SNAPSHOT
-Built-By: devair
+Built-By: dacs
 Implementation-Vendor-Id: com.algaworks.socialbooks
+<<<<<<< HEAD
 Build-Jdk: 1.8.0_131
+=======
+Build-Jdk: 1.8.0_45
+>>>>>>> 0c556ea73651c34e3b85c9ed13868a4649753a7f
 Implementation-URL: http://projects.spring.io/spring-boot/socialbooks/
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.
