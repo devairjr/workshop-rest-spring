@@ -49,7 +49,7 @@ public class LivrosResources {
 	public ResponseEntity<?> buscar(@PathVariable("id") Long id) {
 		Livro livro = livrosService.buscar(id);
 		
-		CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS);//Diz que qualquer requisição que eu fizer em 5 segundos é usada a informação consultada
+		CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS);//Diz que qualquer requisição que eu fizer em 20 segundos é usada a informação consultada
 		
 		return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(livro);
 	}
