@@ -57,6 +57,12 @@
 		  <artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
 		
+		<!-- dependência que controla a segurança da API -->
+		<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>
